@@ -1,0 +1,8 @@
+{
+    "name": "verifycation-plugin",
+    "author": "ikenxuan",
+    "type": "module",
+    "dependencies": {
+        "fastify": "^4.18.0"
+    }
+}
