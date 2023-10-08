@@ -41,13 +41,14 @@ git clone 未上传
 * 从插件备份文件夹中恢复 `genshen` 原本被替换的文件
 
 ## TODO
+- [x] 适配 `miao-plugin` 会弹验证码的命令
 
 **！目前插件内 `jump-server` 启动方法已注释，重定向服需额外单独部署**
 ---
 [x] 适配 `miao-plugin` 会弹验证码的命令
 
-[ ] 插件本体自带短链转发 (应该会咕咕咕，因为 [jump-server](https://github.com/ikenxuan/jump-server) 可单独部署，没必要放到插件里面启动)
+- [ ] 自带重定向服务器(短链转发)
 
-[ ] 复刻 `Yunzai-Bot` #签到 功能
+- [ ] 复刻 `Yunzai-Bot` #签到 功能
 
-[ ] 适配更多接码接口(目前适配了小灰灰)
+- [ ] 适配更多接码接口
