@@ -23,7 +23,7 @@ export class pass extends plugin {
                     permission: "master"
                 },
                 {
-                    reg: "^#(米游社|bbs)*(还原|恢复)备份?$",
+                    reg: "^#(米游社|bbs)(还原|恢复)备份?$",
                     fnc: "restore",
                     permission: "master"
                 }
@@ -38,13 +38,11 @@ export class pass extends plugin {
         } else {
             try {
                 /** 备份 */
-                fs.copyFileSync(mysinfo_path, backup_mysinfo_path)
-                fs.copyFileSync(apiTool_path, backup_apiTool_path)
+                fs.renameSync(mysinfo_path, backup_mysinfo_path)
+                fs.renameSync(apiTool_path, backup_apiTool_path)
                 /** 重写 */
-                const mysinfo = 'import MysInfo from "../../../verifycation-plugin/mys/mysInfo.js"\nexport default MysInfo'
-                const apiTool = 'import apiTool from "../../../verifycation-plugin/mys/apiTool.js"\nexport default apiTool'
-                fs.writeFileSync(mysinfo_path, mysinfo, 'utf8')
-                fs.writeFileSync(apiTool_path, apiTool, 'utf8')
+                fs.copyFileSync(plugin_path + '/mys/res/mysinfo.js', mysinfo_path)
+                fs.copyFileSync(plugin_path + '/mys/res/apiTool.js', mysinfo_path)
                 return await this.reply("替换完成，重启生效！", true)
             } catch (error) {
                 return await this.reply(`替换失败:${error.message}`, true)
