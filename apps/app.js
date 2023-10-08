@@ -23,7 +23,7 @@ export class pass extends plugin {
                     permission: "master"
                 },
                 {
-                    reg: "^#(米游社|bbs)(还原|恢复)备份?$",
+                    reg: "^#(米游社|bbs)(还原|恢复)$",
                     fnc: "restore",
                     permission: "master"
                 }
