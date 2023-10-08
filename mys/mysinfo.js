@@ -162,7 +162,8 @@ export default class MysInfo {
     if (!mysInfo.uid || !mysInfo.ckInfo.ck) return false
     e.uid = mysInfo.uid
 
-    let mysApi = new MysApi(mysInfo.uid, mysInfo.ckInfo.ck, option, e.isSr, e)
+    let user = e.user?.getMysUser()
+    let mysApi = new MysApi(mysInfo.uid, mysInfo.ckInfo.ck, option, e.isSr, user.device)
 
     let res
     if (lodash.isObject(api)) {
@@ -431,32 +432,29 @@ export default class MysInfo {
 
   // copy from csv
   async bbsGeetest(_MysApi) {
-    if (!Config.geeAddress && !Config.checkAddress) return ""
+    if ((!Config.geeAddress  && !Config.checkAddress) === "") return ""
     try {
       let RES = await _MysApi.getData('createVerification')
       RES.data.uid = this.uid
 
       const targetUrl = Config.geeAddress.replace('{0}', RES.data.gt).replace('{1}', RES.data.challenge)
 
-      if (Config.jumpAddress === '') {
-        const gettoken = await fetch(`${Config.jumpAddress}/createverify`, {
-          method: 'POST',
-          body: JSON.stringify({
-            url: targetUrl
-          })
+      const gettoken = await fetch(`${Config.jumpAddress}createverify`, {
+        method: 'POST',
+        body: JSON.stringify({
+          url: targetUrl
         })
-        const token = await gettoken.json()
-        const verifyurl = `${Config.jumpAddress}/geetest?e=${token.token}`
-        let ret
-        ret = await this.e.reply('米游社接口遇见验证码，请在 2 分钟内通过以下地址完成验证！\n' + verifyurl, false, { recallMsg: 120 })
+      })
+      const token = await gettoken.json()
+      const verifyurl = `${Config.jumpAddress}geetest?e=${token.token}`
+      let ret
+      ret = await this.e.reply('米游社接口遇见验证码，请在 2 分钟内通过以下地址完成验证！\n' + verifyurl, false, { recallMsg: 120 })
 
-        let response = await fetch(targetUrl)
-        if (!response.ok) {
-          logger.error(`[validate][${this.uid}] ${response.status} ${response.statusText}`)
-          return false
-        }
-      } else { this.e.reply('米游社接口遇见验证码，请在 2 分钟内通过以下地址完成验证！\n' + targetUrl, false, { recallMsg: 120 }) }
-
+      /*let response = await fetch(targetUrl)
+      if (!response.ok) {
+        logger.error(`[validate][${this.uid}] ${response.status} ${response.statusText}`)
+        return false
+      }*/
       for (let n = 1; n < 120; n++) {
         await common.sleep(1000)
         try {

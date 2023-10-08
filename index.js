@@ -1,13 +1,13 @@
 import fs from 'fs'
 import path from 'path'
-import server from './jump-server/index.js'
+// server from './jump-server/index.js'
 
 const _path = process.cwd()
 const files = fs.readdirSync('./plugins/verifycation-plugin/apps').filter(file => file.endsWith('.js'))
 
 async function configfile() {
-  const configPath = process.cwd() + '/plugins/verifycation-plugin/config/config/config.yaml'
-  const configExampleFile = process.cwd() + '/plugins/verifycation-plugin/config/defset/config.yaml'
+  const configPath = process.cwd() + '/plugins/verifycation-plugin/config/config/config.json'
+  const configExampleFile = process.cwd() + '/plugins/verifycation-plugin/config/defset/config.json'
   fs.access(configPath, fs.constants.F_OK, (err) => {
       if (err) {
           fs.copyFile(configExampleFile, configPath, (err) => {
@@ -54,7 +54,8 @@ for (let i in files) {
   }
   apps[name] = ret[i].value[Object.keys(ret[i].value)[0]]
 }
+console.log('verifycation-plugin 初始化')
 
-server()
+// server()
 
 export { apps }

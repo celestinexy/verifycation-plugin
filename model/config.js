@@ -1,44 +1,44 @@
-import fs from "fs"
-import Yaml from "yaml"
-import path from "path"
+import fs from 'fs'
+import lodash from 'lodash'
+import { MyDirPath } from '../app.config.js'
 
-const _path = "./plugins/verifycation-plugin/config"
-const configPath = _path + "/config/config.yaml"
+const configPath = MyDirPath + '/config/config/config.json'
 
-if (!fs.existsSync(configPath)) {
+const defaultConfig = {
+    "geeAddress": "",
+    "checkAddress": "",
+    "jumpAddress": ""
+}
+let config = {}
 
-  const configDir = path.dirname(configPath)
-
-  if (!fs.existsSync(configDir)) {
-    fs.mkdirSync(configDir, { recursive: true })
-  }
-
-  fs.copyFileSync(_path + "/defset/config.yaml", configPath)
+function getConfig() {
+    const content = fs.readFileSync(configPath)
+    return JSON.parse(content)
 }
 
-const config = Yaml.parse(fs.readFileSync(_path + "/config/config.yaml", "utf8"))
-const Config = {
-  geeAddress: config.geeAddress,
-  jumpAddress: config.jumpAddress,
-  checkAddress: config.checkAddress
+config = Object.assign({}, defaultConfig, config)
+if (fs.existsSync(configPath)) {
+    const fullPath = fs.realpathSync(configPath)
+    const data = fs.readFileSync(fullPath)
+    if (data) {
+        try { config = JSON.parse(data) } catch (e) { logger.error('verifycation-plugin读取配置文件出错', e) }
+    }
 }
-// 初始化加载配置
-loadConfig()
-let reloadconfig = false
-fs.watch(_path + "/config/config.yaml", () => {
-  // 文件发生变化时,重新加载
-  reloadconfig = true
-  setTimeout(() => {
-    loadConfig()
-    reloadconfig = false
-  }, 300)
+export const Config = new Proxy(config, {
+    get(target, prop) {
+        const config = getConfig()
+        return config[prop]
+    },
+
+    set(target, property, value) {
+        target[property] = value
+        const merged = Object.assign({}, defaultConfig, target)
+        try {
+            fs.writeFileSync(configPath, JSON.stringify(merged, null, 2), { flag: 'w' })
+        } catch (err) {
+            logger.error(err)
+            return false
+        }
+        return true
+    }
 })
-function loadConfig() {
-  const config = Yaml.parse(fs.readFileSync(_path + "/config/config.yaml", "utf8"))
-
-  Config.geeAddress = config.geeAddress
-  Config.jumpAddress = config.jumpAddress
-  Config.checkAddress = config.checkAddress
-}
-
-export { Config }
