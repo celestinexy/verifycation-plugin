@@ -7,7 +7,7 @@ const mysinfo_path = _path + '/plugins/genshin/model/mys/mysInfo.js'
 const apiTool_path = _path + '/plugins/genshin/model/mys/apiTool.js'
 
 
-const backup_mysinfo_path = _path + '/plugins/verifycation-plugin/backup/mysinfo.js'
+const backup_mysinfo_path = _path + '/plugins/verifycation-plugin/backup/mysInfo.js'
 const backup_apiTool_path = _path + '/plugins/verifycation-plugin/backup/apiTool.js'
 
 export class pass extends plugin {
