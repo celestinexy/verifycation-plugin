@@ -42,7 +42,7 @@ export class pass extends plugin {
                 fs.renameSync(apiTool_path, backup_apiTool_path)
                 /** 重写 */
                 fs.copyFileSync(plugin_path + '/mys/res/mysInfo.js', mysinfo_path)
-                fs.copyFileSync(plugin_path + '/mys/res/apiTool.js', mysinfo_path)
+                fs.copyFileSync(plugin_path + '/mys/res/apiTool.js', apiTool_path)
                 return await this.reply("替换完成，重启生效！", true)
             } catch (error) {
                 return await this.reply(`替换失败:${error.message}`, true)
