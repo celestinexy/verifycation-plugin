@@ -3,10 +3,10 @@ import fastify from "fastify"
 const server = fastify({
   logger: false,
 })
-server.listen({
-  port: 3001,
+/*server.listen({
+  port: 1145,
   host: '0.0.0.0' 
-})
+})*/
 server.get('/', (req, reply) => {
   reply.send({
     code: 200,
@@ -107,4 +107,4 @@ function verifyToken(token) {
 
   return true; //有效
 }
-export default server()
+export default server
